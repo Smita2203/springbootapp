@@ -1,14 +1,9 @@
-FROM maven:3.6.3-openjdk-11-slim as BUILDER
-ARG VERSION=0.1-SNAPSHOT
-WORKDIR /build/
-COPY pom.xml/build/
-COPY  src /build/src
+FROM maven:3.5.2-jdk-8
 
-RUN mvn clean package
-COPY target/springboot-demo 1-${VERSION}.jar target/application.jar
+RUN mkdir -p /app
 
-FROM openjdk:11.0.22-jre-slim
-WORKDIR /app/
+COPY . /app
 
-COPY --from=Builder /build/target/application.jar /app/
-CMD java -jar /app/application.jar
+WORKDIR /app
+
+CMD mvn spring-boot:run 
